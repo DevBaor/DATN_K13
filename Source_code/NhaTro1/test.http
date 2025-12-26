@@ -1,0 +1,122 @@
+@host = http://127.0.0.1:8000
+@token = 17|iejRv6uaKA28Hu5jqwoq9Iw4JwOaEWa4mTukviVW9ef15ce5
+@day_tro_id = 16
+@phong_id = 13
+@bai_dang_id = 9
+
+### 1) Đăng ký (chạy 1 lần; đổi email nếu muốn test lại)
+POST {{host}}/api/auth/register
+Accept: application/json
+Content-Type: application/json
+
+{
+  "ho_ten": "Nguyen Van A",
+  "email": "a@example.com",
+  "so_dien_thoai": "0901234567",
+  "mat_khau": "123456",
+  "vai_tro": "chu_tro"
+}
+
+### 2) Đăng nhập (lấy token ở response, dán lên @token trên cùng)
+POST {{host}}/api/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "a@example.com",
+  "mat_khau": "123456"
+}
+
+### 3) Tạo dãy trọ
+# => Ghi nhớ "id" trả về để dùng cho bước 4 (day_tro_id)
+POST {{host}}/api/day-tro
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "ten_day_tro": "Dãy A",
+  "dia_chi": "123 Nguyễn Văn Cừ, Q5"
+}
+
+### 4) Tạo phòng trong dãy trọ
+# THAY day_tro_id = id dãy trọ ở bước 3
+# => Ghi nhớ "id" trả về để dùng cho bước 6 (phong_id)
+POST {{host}}/api/phong
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "day_tro_id": {{day_tro_id}},
+  "so_phong": "A101",
+  "gia": 2500000,
+  "trang_thai": "trong",
+  "suc_chua": 2,
+  "dien_tich": 18,
+  "tang": 1
+}
+
+### 5) Upload avatar người dùng
+# Cần file avatar.jpg cùng thư mục với test.http
+POST {{host}}/api/me/avatar
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: multipart/form-data; boundary=BOUNDARY
+
+--BOUNDARY
+Content-Disposition: form-data; name="anh"; filename="avatar.jpg"
+Content-Type: image/jpeg
+
+< ./avatar.jpg
+--BOUNDARY--
+
+### 6) Tạo bài đăng cho phòng vừa tạo
+# THAY phong_id = id phòng ở bước 4
+# => Ghi nhớ "id" trả về để dùng ở bước 7 (bai_dang_id)
+POST {{host}}/api/bai-dang
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "phong_id": {{phong_id}},
+  "tieu_de": "Phòng A101 có ban công",
+  "mo_ta": "Phòng mới xây, sạch sẽ, có máy lạnh.",
+  "gia_niem_yet": 2500000,
+  "trang_thai": "dang"
+}
+
+### 7) Upload ảnh cho bài đăng
+# ĐÚNG ROUTE theo api.php của bạn: /api/anh-bai-dang/upload
+# Cần room1.jpg và room2.png cùng thư mục test.http
+# THAY bai_dang_id = id bài đăng ở bước 6
+POST {{host}}/api/anh-bai-dang/upload
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: multipart/form-data; boundary=BOUNDARY
+
+--BOUNDARY
+Content-Disposition: form-data; name="bai_dang_id"
+
+{{bai_dang_id}}
+--BOUNDARY
+Content-Disposition: form-data; name="anh[]"; filename="room1.jpg"
+Content-Type: image/jpeg
+
+< ./room1.jpg
+--BOUNDARY
+Content-Disposition: form-data; name="anh[]"; filename="room2.png"
+Content-Type: image/png
+
+< ./room2.png
+--BOUNDARY--
+
+### 8) (KHÁCH) Xem danh sách bài đăng (public)
+GET {{host}}/api/bai-dang?trang_thai=dang&per_page=5
+Accept: application/json
+
+### 9) (KHÁCH) Xem chi tiết 1 bài đăng
+#  THAY {{bai_dang_id}} = id bài đăng ở bước 6
+GET {{host}}/api/bai-dang/{{bai_dang_id}}
+Accept: application/json

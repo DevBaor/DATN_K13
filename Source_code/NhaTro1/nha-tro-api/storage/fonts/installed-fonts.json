@@ -1,0 +1,8 @@
+{
+    "dejavu sans": {
+        "bold": "D:\\NhaTro\\nha-tro-api\\vendor\\dompdf\\dompdf\/lib\/fonts\/DejaVuSans-Bold",
+        "bold_italic": "D:\\NhaTro\\nha-tro-api\\vendor\\dompdf\\dompdf\/lib\/fonts\/DejaVuSans-BoldOblique",
+        "italic": "D:\\NhaTro\\nha-tro-api\\vendor\\dompdf\\dompdf\/lib\/fonts\/DejaVuSans-Oblique",
+        "normal": "dejavu_sans_normal_a0a7c1d50209aefa88c5ec751bbd6203"
+    }
+}
