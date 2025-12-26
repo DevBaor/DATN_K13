@@ -24,7 +24,6 @@ Dự án là một hệ sinh thái toàn diện hỗ trợ quản lý nhà trọ
 
 ## 🚀 Hướng Dẫn Khởi Chạy
 
-### 🧠 1. AI Engine (Python)
 Mở terminal tại thư mục `ai_engine`:
 ```bash
 cd ai_engine
