@@ -24,8 +24,9 @@ Dự án là một hệ sinh thái toàn diện hỗ trợ quản lý nhà trọ
 
 ## 🚀 Hướng Dẫn Khởi Chạy
 
-Mở terminal tại thư mục `ai_engine`:
 ```bash
+
+Mở terminal tại thư mục `ai_engine`:
 cd ai_engine
 # Cài đặt thư viện nếu cần: pip install -r requirements.txt
 uvicorn api:app --reload --port 8002
